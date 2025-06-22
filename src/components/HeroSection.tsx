@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
@@ -13,13 +14,16 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/5 pt-20">
+    <section className="min-h-screen flex items-center justify-center pt-20 relative">
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Profile Image */}
           <div className="lg:w-1/2 flex justify-center">
             <div className="relative">
-              <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-accent shadow-2xl">
+              {/* Background glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 rounded-full blur-3xl scale-110"></div>
+              
+              <div className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-accent shadow-2xl">
                 <img
                   src="/lovable-uploads/bd525172-372c-4945-b68d-c1cfa293505b.png"
                   alt="Lucas Charlot"
@@ -29,6 +33,10 @@ const HeroSection = () => {
               <div className="absolute -top-4 -right-4 w-20 h-20 bg-accent rounded-full flex items-center justify-center text-2xl animate-bounce">
                 👋
               </div>
+              
+              {/* Floating elements */}
+              <div className="absolute -left-8 top-1/2 w-4 h-4 bg-primary rounded-full animate-ping"></div>
+              <div className="absolute -right-8 bottom-1/4 w-3 h-3 bg-accent rounded-full animate-pulse"></div>
             </div>
           </div>
 
@@ -38,9 +46,12 @@ const HeroSection = () => {
               Hi, I'm{' '}
               <span className="text-gradient">Lucas Charlot</span>
             </h1>
-            <h2 className="text-2xl lg:text-3xl text-muted-foreground mb-8 animate-fade-up" style={{animationDelay: '0.2s'}}>
+            <h2 className="text-2xl lg:text-3xl text-muted-foreground mb-4 animate-fade-up" style={{animationDelay: '0.2s'}}>
               Web Designer & Brand Strategist
             </h2>
+            <p className="text-lg text-muted-foreground mb-8 animate-fade-up" style={{animationDelay: '0.3s'}}>
+              Creating premium digital experiences for clients across Texas, Nigeria, and worldwide
+            </p>
             
             {/* 3D Animated Text */}
             <div className="mb-8 h-16 flex items-center justify-center lg:justify-start animate-fade-up" style={{animationDelay: '0.4s'}}>
@@ -57,12 +68,18 @@ const HeroSection = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-up" style={{animationDelay: '0.6s'}}>
-              <button className="btn-gradient text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform duration-300">
+              <Link 
+                to="/my-work"
+                className="btn-gradient text-white px-8 py-3 rounded-full font-semibold hover:scale-105 transition-transform duration-300 text-center"
+              >
                 View My Work
-              </button>
-              <button className="border-2 border-primary text-primary px-8 py-3 rounded-full font-semibold hover:bg-primary hover:text-white transition-all duration-300">
+              </Link>
+              <Link 
+                to="/contact"
+                className="border-2 border-primary text-primary px-8 py-3 rounded-full font-semibold hover:bg-primary hover:text-white transition-all duration-300 text-center"
+              >
                 Get In Touch
-              </button>
+              </Link>
             </div>
           </div>
         </div>

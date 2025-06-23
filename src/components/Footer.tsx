@@ -6,36 +6,36 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-br from-primary via-primary/90 to-black text-white py-16">
+    <footer className="bg-gradient-to-br from-primary via-primary/90 to-black text-white py-8 md:py-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-8">
           {/* Brand */}
-          <div className="col-span-1 md:col-span-2">
-            <h3 className="text-3xl font-bold mb-4 text-accent">Lucas Charlot</h3>
-            <p className="text-white/80 mb-6 max-w-md">
+          <div className="col-span-1 md:col-span-2 text-center md:text-left">
+            <h3 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4 text-accent">Lucas Charlot</h3>
+            <p className="text-white/80 mb-4 md:mb-6 text-sm md:text-base">
               Professional web designer and brand strategist helping businesses create powerful online presence 
-              through innovative design and strategic thinking. Based in Texas, serving clients worldwide.
+              through innovative design and strategic thinking. Based in Texas, serving clients in USA and Nigeria.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
-                <Facebook size={20} />
+            <div className="flex justify-center md:justify-start space-x-3 md:space-x-4">
+              <a href="https://www.facebook.com/lucas.charlotte.974271?mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer" className="bg-white/10 p-2 md:p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
+                <Facebook size={16} className="md:w-5 md:h-5" />
               </a>
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
-                <Twitter size={20} />
+              <a href="#" className="bg-white/10 p-2 md:p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
+                <Twitter size={16} className="md:w-5 md:h-5" />
               </a>
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
-                <Instagram size={20} />
+              <a href="#" className="bg-white/10 p-2 md:p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
+                <Instagram size={16} className="md:w-5 md:h-5" />
               </a>
-              <a href="#" className="bg-white/10 p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
-                <Linkedin size={20} />
+              <a href="#" className="bg-white/10 p-2 md:p-3 rounded-full hover:bg-accent hover:scale-110 transition-all duration-300">
+                <Linkedin size={16} className="md:w-5 md:h-5" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="text-xl font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+          <div className="text-center md:text-left">
+            <h4 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Quick Links</h4>
+            <ul className="space-y-1 md:space-y-2 text-sm md:text-base">
               <li><Link to="/about" className="text-white/80 hover:text-accent transition-colors">About</Link></li>
               <li><Link to="/services" className="text-white/80 hover:text-accent transition-colors">Services</Link></li>
               <li><Link to="/my-work" className="text-white/80 hover:text-accent transition-colors">My Work</Link></li>
@@ -44,9 +44,9 @@ const Footer = () => {
           </div>
 
           {/* Services */}
-          <div>
-            <h4 className="text-xl font-semibold mb-4">Services</h4>
-            <ul className="space-y-2">
+          <div className="text-center md:text-left">
+            <h4 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Services</h4>
+            <ul className="space-y-1 md:space-y-2 text-sm md:text-base">
               <li><span className="text-white/80 hover:text-accent transition-colors cursor-pointer">Web Design</span></li>
               <li><span className="text-white/80 hover:text-accent transition-colors cursor-pointer">Graphic Design</span></li>
               <li><span className="text-white/80 hover:text-accent transition-colors cursor-pointer">SEO</span></li>
@@ -56,19 +56,19 @@ const Footer = () => {
         </div>
 
         {/* Newsletter */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="mb-4 md:mb-0">
-              <h4 className="text-xl font-semibold mb-2">Stay Updated</h4>
-              <p className="text-white/80">Subscribe to get the latest updates and design tips</p>
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 mb-6 md:mb-8">
+          <div className="flex flex-col items-center text-center">
+            <div className="mb-4">
+              <h4 className="text-lg md:text-xl font-semibold mb-2">Stay Updated</h4>
+              <p className="text-white/80 text-sm md:text-base">Subscribe to get the latest updates and design tips</p>
             </div>
-            <div className="flex w-full md:w-auto">
+            <div className="flex flex-col sm:flex-row w-full max-w-md gap-2">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 md:w-64 px-4 py-3 rounded-l-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-accent"
+                className="flex-1 px-3 md:px-4 py-2 md:py-3 rounded-lg md:rounded-l-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-accent text-sm md:text-base"
               />
-              <button className="bg-accent hover:bg-accent/90 px-6 py-3 rounded-r-lg transition-colors font-semibold text-primary">
+              <button className="bg-accent hover:bg-accent/90 px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-r-lg transition-colors font-semibold text-primary text-sm md:text-base">
                 Subscribe
               </button>
             </div>
@@ -76,17 +76,17 @@ const Footer = () => {
         </div>
 
         {/* Bottom */}
-        <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row items-center justify-between">
-          <p className="text-white/80 mb-4 md:mb-0">
+        <div className="border-t border-white/20 pt-6 md:pt-8 flex flex-col items-center space-y-4 md:space-y-0 md:flex-row md:justify-between text-center md:text-left">
+          <p className="text-white/80 text-sm md:text-base">
             © {currentYear} Lucas Charlot. All rights reserved.
           </p>
-          <div className="flex items-center space-x-6">
-            <a href="mailto:lucascharalotte@gmail.com" className="flex items-center space-x-2 text-white/80 hover:text-accent transition-colors">
-              <Mail size={16} />
+          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 md:space-x-6">
+            <a href="mailto:lucascharalotte@gmail.com" className="flex items-center space-x-2 text-white/80 hover:text-accent transition-colors text-sm md:text-base">
+              <Mail size={14} className="md:w-4 md:h-4" />
               <span>lucascharalotte@gmail.com</span>
             </a>
-            <a href="tel:+234XXXXXXXXXX" className="flex items-center space-x-2 text-white/80 hover:text-accent transition-colors">
-              <Phone size={16} />
+            <a href="tel:+234XXXXXXXXXX" className="flex items-center space-x-2 text-white/80 hover:text-accent transition-colors text-sm md:text-base">
+              <Phone size={14} className="md:w-4 md:h-4" />
               <span>+234XXXXXXXXXX</span>
             </a>
           </div>

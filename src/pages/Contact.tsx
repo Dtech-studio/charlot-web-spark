@@ -1,12 +1,15 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ChatAssistant from '@/components/ChatAssistant';
 import { Phone, Mail, MessageCircle, Send, MapPin } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const Contact = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [zapierWebhook, setZapierWebhook] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,6 +18,18 @@ const Contact = () => {
     message: ''
   });
   const [errors, setErrors] = useState<any>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Scroll to contact form if hash is present
+    if (window.location.hash === '#contact-form') {
+      const element = document.getElementById('contact-form');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, []);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,7 +63,29 @@ const Contact = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const triggerZapierWebhook = async (data: any) => {
+    if (!zapierWebhook) return;
+
+    try {
+      await fetch(zapierWebhook, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "no-cors",
+        body: JSON.stringify({
+          ...data,
+          timestamp: new Date().toISOString(),
+          source: 'Lucas Charlot Portfolio Contact Form'
+        }),
+      });
+      console.log('Zapier webhook triggered successfully');
+    } catch (error) {
+      console.error('Error triggering Zapier webhook:', error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: any = {};
 
@@ -71,8 +108,59 @@ const Contact = () => {
       return;
     }
 
-    console.log('Form submitted:', formData);
-    // Handle form submission logic here
+    setIsSubmitting(true);
+
+    try {
+      // Save to Supabase
+      const { error: dbError } = await supabase
+        .from('messages')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null,
+          message: formData.message
+        }]);
+
+      if (dbError) {
+        throw dbError;
+      }
+
+      // Send email notification
+      const { error: emailError } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (emailError) {
+        console.error('Email error:', emailError);
+      }
+
+      // Trigger Zapier webhook for WhatsApp
+      await triggerZapierWebhook(formData);
+
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for your message. I'll get back to you soon!",
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        whatsapp: '',
+        message: ''
+      });
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error",
+        description: "There was an error sending your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -88,7 +176,24 @@ const Contact = () => {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
+          {/* Zapier Webhook Configuration */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">WhatsApp Notifications (Optional)</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Add your Zapier webhook URL to receive WhatsApp notifications when someone contacts you.
+              </p>
+              <input
+                type="url"
+                placeholder="https://hooks.zapier.com/hooks/catch/..."
+                value={zapierWebhook}
+                onChange={(e) => setZapierWebhook(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          <div className="max-w-4xl mx-auto" id="contact-form">
             <div className="grid md:grid-cols-2 gap-12">
               {/* Contact Information */}
               <div className="space-y-8">
@@ -113,7 +218,9 @@ const Contact = () => {
                       <Mail className="text-accent" size={24} />
                       <div>
                         <p className="font-semibold">Email</p>
-                        <p className="text-muted-foreground">lucascharalotte@gmail.com</p>
+                        <a href="mailto:lucascharalotte@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+                          lucascharalotte@gmail.com
+                        </a>
                       </div>
                     </div>
 
@@ -217,10 +324,11 @@ const Contact = () => {
 
                   <button
                     type="submit"
-                    className="w-full btn-gradient text-white py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center space-x-2"
+                    disabled={isSubmitting}
+                    className="w-full btn-gradient text-white py-4 rounded-lg font-semibold hover:scale-105 transition-transform duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send size={20} />
-                    <span>Send Message</span>
+                    <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
                   </button>
                 </form>
               </div>

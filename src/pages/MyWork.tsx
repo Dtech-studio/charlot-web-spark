@@ -72,6 +72,11 @@ const MyWork = () => {
     setActiveFilter(category);
   };
 
+  const scrollToContact = () => {
+    // Navigate to contact page and scroll to contact form
+    window.location.href = '/contact#contact-form';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
       <Header />
@@ -134,12 +139,12 @@ const MyWork = () => {
                   <div className="bg-gray-50 p-3 rounded-lg mb-4">
                     <p className="text-sm text-gray-600">{project.details}</p>
                   </div>
-                  <Link
-                    to="/contact"
-                    className="inline-block bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105"
+                  <button
+                    onClick={scrollToContact}
+                    className="inline-block bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 w-full text-center"
                   >
                     Get Similar Work
-                  </Link>
+                  </button>
                 </div>
               </div>
             ))}
@@ -152,12 +157,12 @@ const MyWork = () => {
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Let's discuss how I can help bring your vision to life with professional design and strategic thinking.
               </p>
-              <Link
-                to="/contact"
+              <button
+                onClick={scrollToContact}
                 className="inline-block bg-gradient-to-r from-primary to-accent text-white px-8 py-3 rounded-full font-semibold hover:scale-105 hover:shadow-lg transition-all duration-300"
               >
                 Get In Touch
-              </Link>
+              </button>
             </div>
           </div>
         </div>

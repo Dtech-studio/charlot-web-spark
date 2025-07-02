@@ -66,16 +66,38 @@ const ChatAssistant = () => {
   const getComprehensiveResponse = (message: string) => {
     const lowerMessage = message.toLowerCase();
     
-    // Check for specific categories
+    // Check for specific categories with better matching
+    let bestMatch = { key: '', score: 0 };
+    
     for (const [key] of Object.entries(comprehensiveResponses)) {
       if (lowerMessage.includes(key)) {
-        const responses = comprehensiveResponses[key];
-        const availableResponses = responses.filter(
-          response => !conversationHistory.includes(response)
-        );
-        const responsesToUse = availableResponses.length > 0 ? availableResponses : responses;
-        const randomIndex = Math.floor(Math.random() * responsesToUse.length);
-        return responsesToUse[randomIndex];
+        const score = key.length / lowerMessage.length;
+        if (score > bestMatch.score) {
+          bestMatch = { key, score };
+        }
+      }
+    }
+    
+    if (bestMatch.key) {
+      const responses = comprehensiveResponses[bestMatch.key];
+      let lastUsedIndex = -1;
+      
+      // Find the last used response index manually
+      for (let i = conversationHistory.length - 1; i >= 0; i--) {
+        const index = responses.indexOf(conversationHistory[i]);
+        if (index !== -1) {
+          lastUsedIndex = index;
+          break;
+        }
+      }
+      
+      // If we have responses and haven't used all, pick next one
+      if (lastUsedIndex < responses.length - 1) {
+        return responses[lastUsedIndex + 1];
+      } else {
+        // If we've used all, pick a random one
+        const randomIndex = Math.floor(Math.random() * responses.length);
+        return responses[randomIndex];
       }
     }
     

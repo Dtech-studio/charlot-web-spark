@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const Contact = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [zapierWebhook, setZapierWebhook] = useState('');
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -63,27 +63,6 @@ const Contact = () => {
     }
   };
 
-  const triggerZapierWebhook = async (data: any) => {
-    if (!zapierWebhook) return;
-
-    try {
-      await fetch(zapierWebhook, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        mode: "no-cors",
-        body: JSON.stringify({
-          ...data,
-          timestamp: new Date().toISOString(),
-          source: 'Lucas Charlot Portfolio Contact Form'
-        }),
-      });
-      console.log('Zapier webhook triggered successfully');
-    } catch (error) {
-      console.error('Error triggering Zapier webhook:', error);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,31 +90,19 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Save to Supabase
-      const { error: dbError } = await supabase
-        .from('messages')
-        .insert([{
+      // Use the new submit-message Edge Function
+      const { error } = await supabase.functions.invoke('submit-message', {
+        body: {
           name: formData.name,
           email: formData.email,
           phone: formData.phone || null,
           message: formData.message
-        }]);
-
-      if (dbError) {
-        throw dbError;
-      }
-
-      // Send email notification
-      const { error: emailError } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
+        }
       });
 
-      if (emailError) {
-        console.error('Email error:', emailError);
+      if (error) {
+        throw error;
       }
-
-      // Trigger Zapier webhook for WhatsApp
-      await triggerZapierWebhook(formData);
 
       toast({
         title: "Message Sent!",
@@ -176,22 +143,6 @@ const Contact = () => {
             </p>
           </div>
 
-          {/* Zapier Webhook Configuration */}
-          <div className="max-w-4xl mx-auto mb-8">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
-              <h3 className="text-lg font-semibold mb-4 text-gray-800">WhatsApp Notifications (Optional)</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Add your Zapier webhook URL to receive WhatsApp notifications when someone contacts you.
-              </p>
-              <input
-                type="url"
-                placeholder="https://hooks.zapier.com/hooks/catch/..."
-                value={zapierWebhook}
-                onChange={(e) => setZapierWebhook(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
-              />
-            </div>
-          </div>
 
           <div className="max-w-4xl mx-auto" id="contact-form">
             <div className="grid md:grid-cols-2 gap-12">

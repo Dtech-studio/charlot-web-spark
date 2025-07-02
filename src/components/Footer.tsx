@@ -1,6 +1,7 @@
 
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import NewsletterSubscription from './NewsletterSubscription';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -56,24 +57,7 @@ const Footer = () => {
         </div>
 
         {/* Newsletter */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 md:p-6 mb-6 md:mb-8">
-          <div className="flex flex-col items-center text-center">
-            <div className="mb-4">
-              <h4 className="text-lg md:text-xl font-semibold mb-2">Stay Updated</h4>
-              <p className="text-white/80 text-sm md:text-base">Subscribe to get the latest updates and design tips</p>
-            </div>
-            <div className="flex flex-col sm:flex-row w-full max-w-md gap-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-3 md:px-4 py-2 md:py-3 rounded-lg md:rounded-l-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-accent text-sm md:text-base"
-              />
-              <button className="bg-accent hover:bg-accent/90 px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-r-lg transition-colors font-semibold text-primary text-sm md:text-base">
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </div>
+        <NewsletterSubscription />
 
         {/* Bottom */}
         <div className="border-t border-white/20 pt-6 md:pt-8 flex flex-col items-center space-y-4 md:space-y-0 md:flex-row md:justify-between text-center md:text-left">
